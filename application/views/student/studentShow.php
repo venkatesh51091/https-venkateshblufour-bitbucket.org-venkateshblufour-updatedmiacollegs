@@ -26,9 +26,9 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                             <li class="list-group-item">
                                 <b><?php echo $this->lang->line('section'); ?></b> <a class="pull-right text-aqua"><?php echo $student['section']; ?></a>
                             </li>
-                            <li class="list-group-item">
+                            <!--<li class="list-group-item">
                                 <b><?php echo $this->lang->line('rte'); ?></b> <a class="pull-right text-aqua"><?php echo $student['rte']; ?></a>
-                            </li>
+                            </li>-->
                             <li class="list-group-item">
                                 <b><?php echo $this->lang->line('gender'); ?></b> <a class="pull-right text-aqua"><?php echo $this->lang->line(strtolower($student['gender'])); ?></a>
                             </li>
@@ -80,14 +80,14 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <td><?php echo $this->lang->line('mobile_no'); ?></td>
                                         <td><?php echo $student['mobileno']; ?></td>
                                     </tr>
-                                    <tr>
+                                    <!--<tr>
                                         <td><?php echo $this->lang->line('cast'); ?></td>
                                         <td><?php echo $student['cast']; ?></td>
                                     </tr>
                                     <tr>
                                         <td><?php echo $this->lang->line('religion'); ?></td>
                                         <td><?php echo $student['religion']; ?></td>
-                                    </tr>
+                                    </tr>-->
                                     <tr>
                                         <td><?php echo $this->lang->line('email'); ?></td>
                                         <td><?php echo $student['email']; ?></td>

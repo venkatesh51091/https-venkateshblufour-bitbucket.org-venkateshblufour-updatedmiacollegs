@@ -40,33 +40,7 @@
                                             <span class="text-danger"><?php echo form_error('roll_no'); ?></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
-                                            <select  id="class_id" name="class_id" class="form-control"  >
-                                                <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                                <?php
-                                                foreach ($classlist as $class) {
-                                                    ?>
-                                                    <option value="<?php echo $class['id'] ?>"<?php if (set_value('class_id') == $class['id']) echo "selected=selected" ?>><?php echo $class['class'] ?></option>
-                                                    <?php
-                                                    $count++;
-                                                }
-                                                ?>
-                                            </select>
-                                            <span class="text-danger"><?php echo form_error('class_id'); ?></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
-                                            <select  id="section_id" name="section_id" class="form-control" >
-                                                <option value=""   ><?php echo $this->lang->line('select'); ?></option>
-                                            </select>
-                                            <span class="text-danger"><?php echo form_error('section_id'); ?></span>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                 <div class="row">
 
@@ -127,7 +101,7 @@
                                             <span class="text-danger"><?php echo form_error('category_id'); ?></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <!--<div class="col-md-2">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('religion'); ?></label>
                                             <input id="religion" name="religion" placeholder="" type="text" class="form-control"  value="<?php echo set_value('religion'); ?>" />
@@ -140,7 +114,7 @@
                                             <input id="cast" name="cast" placeholder="" type="text" class="form-control"  value="<?php echo set_value('cast'); ?>" />
                                             <span class="text-danger"><?php echo form_error('cast'); ?></span>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1"><?php echo $this->lang->line('mobile_no'); ?></label>
@@ -163,19 +137,25 @@
                                             <input id="admission_date" name="admission_date" placeholder="" type="text" class="form-control"  value="<?php echo set_value('admission_date', date($this->customlib->getSchoolDateFormat())); ?>" readonly="readonly" />
                                             <span class="text-danger"><?php echo form_error('admission_date'); ?></span>
                                         </div>
-                                    </div>                              
-                                    <div class="col-md-3 col-xs-12">
-                                        <label><?php echo $this->lang->line('rte'); ?></label>
-                                        <div class="radio" style="margin-top: 2px;">
-                                            <label><input class="radio-inline" type="radio" name="rte" value="Yes"  <?php
-                                                echo set_value('rte') == "yes" ? "checked" : "";
-                                                ?>  ><?php echo $this->lang->line('yes'); ?></label>
-                                                <label><input class="radio-inline" checked="checked" type="radio" name="rte" value="No" <?php
-                                                    echo set_value('rte') == "no" ? "checked" : "";
-                                                    ?>  ><?php echo $this->lang->line('no'); ?></label>
-                                                </div>
-                                                <span class="text-danger"><?php echo form_error('rte'); ?></span>
-                                            </div>
+                                    </div>   
+
+
+
+
+    <!-- <div class="col-md-3 col-xs-12">
+    <label><?php echo $this->lang->line('rte'); ?></label>
+    <div class="radio" style="margin-top: 2px;">
+        <label><input class="radio-inline" type="radio" name="rte" value="Yes"  <?php
+            echo set_value('rte') == "yes" ? "checked" : "";
+            ?>  ><?php echo $this->lang->line('yes'); ?></label>
+            <label><input class="radio-inline" checked="checked" type="radio" name="rte" value="No" <?php
+                echo set_value('rte') == "no" ? "checked" : "";
+                ?>  ><?php echo $this->lang->line('no'); ?></label>
+            </div>
+            <span class="text-danger"><?php echo form_error('rte'); ?></span>
+        </div>-->
+
+
                                             <div class="col-md-3" style="display:none;">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1"><?php echo $this->lang->line('fees_discount'); ?></label>
@@ -190,7 +170,39 @@
                                                 </div>
                                                 <span class="text-danger"><?php echo form_error('file'); ?></span>
                                             </div>
-                                        </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+            <div class="form-group">
+                <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
+                <select  id="class_id" name="class_id" class="form-control"  >
+                    <option value=""><?php echo $this->lang->line('select'); ?></option>
+                    <?php
+                    foreach ($classlist as $class) {
+                        ?>
+                        <option value="<?php echo $class['id'] ?>"<?php if (set_value('class_id') == $class['id']) echo "selected=selected" ?>><?php echo $class['class'] ?></option>
+                        <?php
+                        $count++;
+                    }
+                    ?>
+                </select>
+                <span class="text-danger"><?php echo form_error('class_id'); ?></span>
+            </div>
+        </div>
+    <div class="col-md-3">
+
+        <div class="form-group">
+            <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
+            <select  id="section_id" name="section_id" class="form-control" >
+                <option value=""   ><?php echo $this->lang->line('select'); ?></option>
+            </select>
+            <span class="text-danger"><?php echo form_error('section_id'); ?></span>
+        </div>
+    </div>
+
+ </div>
                                         <div class="row">
                                             <div class="">
                                                 <div class="col-md-2">

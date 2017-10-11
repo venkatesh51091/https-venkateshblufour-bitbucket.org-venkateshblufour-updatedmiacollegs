@@ -37,36 +37,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('roll_no'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
-                                        <select  id="class_id" name="class_id" class="form-control" >
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($classlist as $class) {
-                                                ?>
-                                                <option value="<?php echo $class['id'] ?>" <?php
-                                                if ($student['class_id'] == $class['id']) {
-                                                    echo "selected =selected";
-                                                }
-                                                ?>><?php echo $class['class'] ?></option>
-                                                        <?php
-                                                        $count++;
-                                                    }
-                                                    ?>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
-                                        <select  id="section_id" name="section_id" class="form-control" >
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('section_id'); ?></span>
-                                    </div>
-                                </div>
+                               
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
@@ -125,7 +96,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('category_id'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <!--<div class="col-md-2">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('cast'); ?></label>
                                         <input id="cast" name="cast" placeholder="" type="text" class="form-control"  value="<?php echo set_value('cast', $student['cast']); ?>" />
@@ -138,7 +109,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <input id="religion" name="religion" placeholder="" type="text" class="form-control"  value="<?php echo set_value('religion', $student['religion']); ?>" />
                                         <span class="text-danger"><?php echo form_error('religion'); ?></span>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"><?php echo $this->lang->line('mobile_no'); ?></label>
@@ -162,7 +133,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                         <span class="text-danger"><?php echo form_error('admission_date'); ?></span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-12">
+                                <!--<div class="col-md-3 col-xs-12">
                                     <label><?php echo $this->lang->line('rte'); ?></label>
                                     <div class="radio" style="margin-top: 2px;">
                                         <label><input class="radio-inline" type="radio" name="rte" value="Yes"  <?php
@@ -173,7 +144,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                             ?>  ><?php echo $this->lang->line('no'); ?></label>
                                     </div>
                                     <span class="text-danger"><?php echo form_error('rte'); ?></span>
-                                </div>
+                                </div>-->
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="exampleInputFile"><?php echo $this->lang->line('select_image'); ?></label>
@@ -181,6 +152,45 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                     </div>
                                     <span class="text-danger"><?php echo form_error('file'); ?></span>
                                 </div>
+                                </div>
+                                <div class="row">
+
+
+
+
+ <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
+                                        <select  id="class_id" name="class_id" class="form-control" >
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                            <?php
+                                            foreach ($classlist as $class) {
+                                                ?>
+                                                <option value="<?php echo $class['id'] ?>" <?php
+                                                if ($student['class_id'] == $class['id']) {
+                                                    echo "selected =selected";
+                                                }
+                                                ?>><?php echo $class['class'] ?></option>
+                                                        <?php
+                                                        $count++;
+                                                    }
+                                                    ?>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
+                                        <select  id="section_id" name="section_id" class="form-control" >
+                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
+                                        </select>
+                                        <span class="text-danger"><?php echo form_error('section_id'); ?></span>
+                                    </div>
+                                </div>
+
+                                
+
                             </div>
                             <div class="box-header">
                                 <h3 class="box-title">
