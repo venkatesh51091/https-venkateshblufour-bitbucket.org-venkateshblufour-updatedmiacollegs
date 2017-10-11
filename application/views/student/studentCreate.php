@@ -191,14 +191,21 @@
                 <span class="text-danger"><?php echo form_error('class_id'); ?></span>
             </div>
         </div>
-    <div class="col-md-3">
-
+   
+    <div class="col-md-9">
         <div class="form-group">
             <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
-            <select  id="section_id" name="section_id" class="form-control" >
-                <option value=""   ><?php echo $this->lang->line('select'); ?></option>
-            </select>
-            <span class="text-danger"><?php echo form_error('section_id'); ?></span>
+            
+            <div class="row" id="schoolclasses"></div>
+            <input type="hidden" name="hdnsections" id="hdnsections" value="<?php echo set_value('hdnsections'); ?>" />
+            
+
+            <!--<select  id="section_id" name="section_id" class="form-control" >
+                <option value="" ><?php echo $this->lang->line('select'); ?></option>
+            </select>-->
+            <span class="text-danger"><?php echo form_error('hdnsections'); ?></span>
+
+
         </div>
     </div>
 
@@ -623,17 +630,47 @@
                     }
                 }
 
-                $(document).ready(function () {
+               
+
+                $(document).ready(function(){
+
+
+                    /* Custom Code Checkboxes */
+                    var hdnsectionids = [];
+                    $(document).on('click','input[type=checkbox]',function(){
+                        if($(this).is(':checked')) {
+                            var sectionid_temp = $(this).val();
+                            hdnsectionids.push(sectionid_temp);   
+                        }
+                        else {         
+                                var sectionid_temp = $(this).val();
+                                var index = hdnsectionids.indexOf(sectionid_temp);
+                                hdnsectionids.splice(index, 1);
+                        }
+
+                         var temp_final_section_ids = hdnsectionids.join(',');
+                         $("#hdnsections").val(temp_final_section_ids);
+                          console.log(hdnsectionids);
+                    });
+                 /* Custom Code Checkboxes */
+
                     var date_format = '<?php echo $result = strtr($this->customlib->getSchoolDateFormat(), ['d' => 'dd', 'm' => 'mm', 'Y' => 'yyyy',]) ?>';
                     var class_id = $('#class_id').val();
                     var section_id = '<?php echo set_value('section_id') ?>';
                     getSectionByClass(class_id, section_id);
 
                     $(document).on('change', '#class_id', function (e) {
+
+                        hdnsectionids.length = 0;
+                        $("#hdnsections").val('');
+
                         $('#section_id').html("");
                         var class_id = $(this).val();
                         var base_url = '<?php echo base_url() ?>';
-                        var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+                        //var div_data = '<option value=""><?php //echo $this->lang->line('select'); ?></option>';
+
+                        var div_data = '';
+
                         $.ajax({
                             type: "GET",
                             url: base_url + "sections/getByClass",
@@ -642,9 +679,15 @@
                             success: function (data) {
                                 $.each(data, function (i, obj)
                                 {
-                                    div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
+                                    /*div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";*/
+
+         div_data += '<div class="col-md-4"><input type="checkbox" name="section_id[]" value="'+ obj.section_id +'" /> ' + obj.section + ' </div>';
+        
+
                                 });
-                                $('#section_id').append(div_data);
+                                //$('#section_id').append(div_data);
+                                 $('#schoolclasses').html(div_data);
+                                
                             }
                         });
                     });
@@ -773,7 +816,7 @@
                         success: function (data) {
                             $('#sibling_name').text("Sibling: " + data.firstname + " " + data.lastname);
                             $('#sibling_name_next').val(data.firstname + " " + data.lastname);
-                            $('#sibling_id').val(student_id); 
+                            $('#sibling_id').val(student_id);
                             $('#father_name').val(data.father_name);
                             $('#father_phone').val(data.father_phone);
                             $('#father_occupation').val(data.father_occupation);

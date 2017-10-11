@@ -81,6 +81,22 @@ class student extends Admin_Controller {
     function view($id) {
         $data['title'] = 'Student Details';
         $student = $this->student_model->get($id);
+
+
+        $sectionList = $this->student_model->getSections($id);
+
+        $sectionids = array();
+        if( strpos($sectionList->section_ids, ',') !== false )
+        {
+            $sectionids = explode(",", $sectionList->section_ids);
+        }
+        else {
+            $sectionids = array($sectionList->section_ids);
+        }
+
+        $data['section_final_List'] = $this->student_model->getSectionFinalList($sectionids);
+ 
+        
         $gradeList = $this->grade_model->get();
         $student_session_id = $student['student_session_id'];
         $student_due_fee = $this->studentfeemaster_model->getStudentFees($student_session_id);
@@ -158,6 +174,7 @@ class student extends Admin_Controller {
         redirect('student/view/' . $student_id);
     }
 
+
     function create() {
 
         $this->session->set_userdata('top_menu', 'Student Information');
@@ -167,10 +184,12 @@ class student extends Admin_Controller {
         $data['title'] = 'Add Student';
         $data['title_list'] = 'Recently Added Student';
         $session = $this->setting_model->getCurrentSession();
+
         $student_result = $this->student_model->getRecentRecord();
         $data['studentlist'] = $student_result;
 
         $class = $this->class_model->get();
+
         $data['classlist'] = $class;
         $category = $this->category_model->get();
         $data['categorylist'] = $category;
@@ -182,8 +201,11 @@ class student extends Admin_Controller {
         $this->form_validation->set_rules('gender', 'Gender', 'trim|required|xss_clean');
         $this->form_validation->set_rules('dob', 'Date of Birth', 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', 'Class', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('section_id', 'Section', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('rte', 'RTE', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('hdnsections', 'Section', 'required');
+        
+
+        //$this->form_validation->set_rules('rte', 'RTE', 'trim|required|xss_clean');
+
         $this->form_validation->set_rules('guardian_name', 'Guardian Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('father_name', 'Father Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('mother_name', 'Mother Name', 'trim|required|xss_clean');
@@ -196,9 +218,15 @@ class student extends Admin_Controller {
             $this->load->view('student/studentCreate', $data);
             $this->load->view('layout/footer', $data);
         } else {
-            $class_id = $this->input->post('class_id');
-            $section_id = $this->input->post('section_id');
 
+
+            $sectionids = $this->input->post('hdnsections');
+
+            $class_id = $this->input->post('class_id');
+            //$section_id = $this->input->post('section_id');
+            $section_id = '';
+
+           
             $fees_discount = $this->input->post('fees_discount');
             $vehroute_id = $this->input->post('vehroute_id');
             $data = array(
@@ -208,14 +236,14 @@ class student extends Admin_Controller {
                 'firstname' => $this->input->post('firstname'),
                 'lastname' => $this->input->post('lastname'),
                 'mobileno' => $this->input->post('mobileno'),
-                'rte' => $this->input->post('rte'),
+                'rte' => 'No',
                 'email' => $this->input->post('email'),
                 'state' => $this->input->post('state'),
                 'city' => $this->input->post('city'),
                 'guardian_is' => $this->input->post('guardian_is'),
                 'pincode' => $this->input->post('pincode'),
-                'religion' => $this->input->post('religion'),
-                'cast' => $this->input->post('cast'),
+                'religion' => '',
+                'cast' => '',
                 'previous_school' => $this->input->post('previous_school'),
                 'dob' => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('dob'))),
                 'current_address' => $this->input->post('current_address'),
@@ -241,6 +269,14 @@ class student extends Admin_Controller {
                 'guardian_address' => $this->input->post('guardian_address'),
             );
             $insert_id = $this->student_model->add($data);
+            
+            $data_classes = array(
+                'student_id' => $insert_id,
+                'section_ids' => $sectionids
+            );
+
+            $this->student_model->add_student_classes($data_classes);
+
             $data_new = array(
                 'student_id' => $insert_id,
                 'class_id' => $class_id,
@@ -249,7 +285,10 @@ class student extends Admin_Controller {
                 'vehroute_id' => $vehroute_id,
                 'fees_discount' => $fees_discount
             );
+
+
             $this->student_model->add_student_session($data_new);
+
             $user_password = $this->role->get_random_password($chars_min = 6, $chars_max = 6, $use_upper_case = false, $include_numbers = true, $include_special_chars = false);
             $sibling_id = $this->input->post('sibling_id');
             $data_student_login = array(
@@ -521,6 +560,24 @@ class student extends Admin_Controller {
         $data['title'] = 'Edit Student';
         $data['id'] = $id;
         $student = $this->student_model->get($id);
+        
+        
+        /* Custom Code */
+        $sectionList = $this->student_model->getSections($id);
+        $sectionids = array();
+        if( strpos($sectionList->section_ids, ',') !== false )
+        {
+            $sectionids = explode(",", $sectionList->section_ids);
+        }
+        else {
+            $sectionids = array($sectionList->section_ids);
+        }
+
+        $data['section_final_List'] = $this->student_model->getSectionList($sectionids);
+        /* Custom Code */
+
+
+
         $genderList = $this->customlib->getGender();
         $data['student'] = $student;
         $data['genderList'] = $genderList;
@@ -535,9 +592,13 @@ class student extends Admin_Controller {
         $this->form_validation->set_rules('lastname', 'Last Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('dob', 'Date of Birth', 'trim|required|xss_clean');
         $this->form_validation->set_rules('class_id', 'Class', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('section_id', 'Section', 'trim|required|xss_clean');
+       
+        //$this->form_validation->set_rules('section_id', 'Section', 'trim|required|xss_clean');
+
+        $this->form_validation->set_rules('hdnsections', 'Section', 'required');
+        
         $this->form_validation->set_rules('guardian_name', 'Guardian Name', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('rte', 'RTE', 'trim|required|xss_clean');
+        //$this->form_validation->set_rules('rte', 'RTE', 'trim|required|xss_clean');
         $this->form_validation->set_rules('father_name', 'Father Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('mother_name', 'Mother Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('guardian_phone', 'Guardian Phone', 'trim|required|xss_clean');
@@ -548,7 +609,11 @@ class student extends Admin_Controller {
             $this->load->view('layout/footer', $data);
         } else {
             $class_id = $this->input->post('class_id');
-            $section_id = $this->input->post('section_id');
+            //$section_id = $this->input->post('section_id');
+
+            $sectionids = $this->input->post('hdnsections');
+
+            $section_id = '';
 
             $fees_discount = $this->input->post('fees_discount');
             $vehroute_id = $this->input->post('vehroute_id');
@@ -559,7 +624,7 @@ class student extends Admin_Controller {
                 'admission_date' => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('admission_date'))),
                 'firstname' => $this->input->post('firstname'),
                 'lastname' => $this->input->post('lastname'),
-                'rte' => $this->input->post('rte'),
+                'rte' => 'No',
                 'mobileno' => $this->input->post('mobileno'),
                 'email' => $this->input->post('email'),
                 'state' => $this->input->post('state'),
@@ -567,7 +632,7 @@ class student extends Admin_Controller {
                 'previous_school' => $this->input->post('previous_school'),
                 'guardian_is' => $this->input->post('guardian_is'),
                 'pincode' => $this->input->post('pincode'),
-                'religion' => $this->input->post('religion'),
+                'religion' => '',
                 'dob' => date('Y-m-d', $this->customlib->datetostrtotime($this->input->post('dob'))),
                 'current_address' => $this->input->post('current_address'),
                 'permanent_address' => $this->input->post('permanent_address'),
@@ -577,7 +642,7 @@ class student extends Admin_Controller {
                 'bank_account_no' => $this->input->post('bank_account_no'),
                 'bank_name' => $this->input->post('bank_name'),
                 'ifsc_code' => $this->input->post('ifsc_code'),
-                'cast' => $this->input->post('cast'),
+                'cast' => '',
                 'father_name' => $this->input->post('father_name'),
                 'father_phone' => $this->input->post('father_phone'),
                 'father_occupation' => $this->input->post('father_occupation'),
@@ -592,6 +657,16 @@ class student extends Admin_Controller {
                 'guardian_address' => $this->input->post('guardian_address'),
             );
             $this->student_model->add($data);
+
+
+             $data_classes = array(
+                'student_id' => $id,
+                'section_ids' => $sectionids
+             );
+
+             $this->student_model->add_student_classes($data_classes);
+
+            
             $data_new = array(
                 'student_id' => $id,
                 'class_id' => $class_id,
@@ -609,6 +684,7 @@ class student extends Admin_Controller {
                 $this->student_model->add($data_img);
             }
             $this->session->set_flashdata('msg', '<div student="alert alert-success text-left">Student Record Updated successfully</div>');
+
             redirect('student/search');
         }
     }
@@ -687,7 +763,7 @@ class student extends Admin_Controller {
         $config['file_name'] = $id . ".jpg";
         $this->upload->initialize($config);
         $this->load->library('upload', $config);
-        if ($this->upload->do_upload()) { 
+        if ($this->upload->do_upload()) {
             $data = array('upload_data' => $this->upload->data());
             $upload_data = $this->upload->data();
             $data_record = array('id' => $id, 'image' => $upload_data['file_name']);

@@ -159,35 +159,41 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 
 
  <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
-                                        <select  id="class_id" name="class_id" class="form-control" >
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                            <?php
-                                            foreach ($classlist as $class) {
-                                                ?>
-                                                <option value="<?php echo $class['id'] ?>" <?php
-                                                if ($student['class_id'] == $class['id']) {
-                                                    echo "selected =selected";
-                                                }
-                                                ?>><?php echo $class['class'] ?></option>
-                                                        <?php
-                                                        $count++;
-                                                    }
-                                                    ?>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('class_id'); ?></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
-                                        <select  id="section_id" name="section_id" class="form-control" >
-                                            <option value=""><?php echo $this->lang->line('select'); ?></option>
-                                        </select>
-                                        <span class="text-danger"><?php echo form_error('section_id'); ?></span>
-                                    </div>
-                                </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1"><?php echo $this->lang->line('class'); ?></label>
+            <select  id="class_id" name="class_id" class="form-control" >
+                <option value=""><?php echo $this->lang->line('select'); ?></option>
+                <?php
+                foreach ($classlist as $class) {
+                    ?>
+                    <option value="<?php echo $class['id'] ?>" <?php
+                    if ($student['class_id'] == $class['id']) {
+                        echo "selected =selected";
+                    }
+                    ?>><?php echo $class['class'] ?></option>
+                            <?php
+                            $count++;
+                        }
+                        ?>
+            </select>
+            <span class="text-danger"><?php echo form_error('class_id'); ?></span>
+        </div>
+    </div>
+        <div class="col-md-9">
+            <div class="form-group">
+                <label for="exampleInputEmail1"><?php echo $this->lang->line('section'); ?></label>
+                
+                <!--<select  id="section_id" name="section_id" class="form-control" >
+                    <option value=""><?php echo $this->lang->line('select'); ?></option>
+                </select>
+                <span class="text-danger"><?php echo form_error('section_id'); ?></span>-->
+
+                <div class="row" id="schoolclasses"></div>
+                <input type="hidden" name="hdnsections" id="hdnsections" value="" />
+                <span class="text-danger"><?php echo form_error('hdnsections'); ?></span>
+
+            </div>
+        </div>
 
                                 
 
@@ -440,36 +446,81 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
     $(document).ready(function () {
         var section_id_post = '<?php echo $student['section_id']; ?>';
         var class_id_post = '<?php echo $student['class_id']; ?>';
-        populateSection(section_id_post, class_id_post);
-        function populateSection(section_id_post, class_id_post) {
-            $('#section_id').html("");
+        
+        var hdnsectionids = [];
+
+        populateSection(class_id_post);
+        function populateSection(class_id_post) {
+            
             var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+            var div_data = '';
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
                 data: {'class_id': class_id_post},
                 dataType: "json",
                 success: function (data) {
-                    $.each(data, function (i, obj)
-                    {
-                        var select = "";
-                        if (section_id_post == obj.section_id) {
-                            var select = "selected=selected";
-                        }
-                        div_data += "<option value=" + obj.section_id + " " + select + ">" + obj.section + "</option>";
-                    });
 
-                    $('#section_id').append(div_data);
+                var temp_sectionids = $.parseJSON('<?php echo $section_final_List; ?>');
+              
+                    var temp2 = [];
+                    for( var j =0; j<temp_sectionids.length;j++) {
+                        temp2.push(temp_sectionids[j].id);
+                    }   
+
+                 
+
+                    for( var i =0; i<data.length;i++) {
+                        
+                        if(jQuery.inArray(data[i].section_id, temp2) != -1) {
+                           
+                            div_data += '<div class="col-md-4"><input type="checkbox" name="section_id[]" value="'+ data[i].section_id +'" checked="checked" /> ' + data[i].section + ' </div>';
+                            hdnsectionids.push(data[i].section_id);
+                        }
+                        else {
+                            
+                            div_data += '<div class="col-md-4"><input type="checkbox" name="section_id[]" value="'+ data[i].section_id +'" /> ' + data[i].section + ' </div>';
+                        }
+                    }
+                        
+                    $('#schoolclasses').html(div_data);
+                     var temp_final_section_ids = hdnsectionids.join(',');
+                    $("#hdnsections").val(temp_final_section_ids);
                 }
             });
         }
 
+                    
+        $(document).on('click','input[type=checkbox]',function(){
+            if($(this).is(':checked')) {
+                var sectionid_temp = $(this).val();
+                hdnsectionids.push(sectionid_temp);   
+            }
+            else {         
+                var sectionid_temp = $(this).val();
+                var index = hdnsectionids.indexOf(sectionid_temp);
+                hdnsectionids.splice(index, 1);
+            }
+            
+             var temp_final_section_ids = hdnsectionids.join(',');
+             $("#hdnsections").val(temp_final_section_ids);
+              console.log(hdnsectionids);
+        });
+                 /* Custom Code Checkboxes */
+
+        
+
+
         $(document).on('change', '#class_id', function (e) {
             $('#section_id').html("");
             var class_id = $(this).val();
+
+
+            hdnsectionids.length = 0;
+            $("#hdnsections").val('');
+
             var base_url = '<?php echo base_url() ?>';
-            var div_data = '<option value=""><?php echo $this->lang->line('select'); ?></option>';
+            var div_data = '';
             $.ajax({
                 type: "GET",
                 url: base_url + "sections/getByClass",
@@ -478,9 +529,15 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                 success: function (data) {
                     $.each(data, function (i, obj)
                     {
-                        div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
+                        //div_data += "<option value=" + obj.section_id + ">" + obj.section + "</option>";
+
+                        div_data += '<div class="col-md-4"><input type="checkbox" name="section_id[]" value="'+ obj.section_id +'" /> ' + obj.section + ' </div>';
+
                     });
-                    $('#section_id').append(div_data);
+                    //$('#section_id').append(div_data);
+
+                     $('#schoolclasses').html(div_data);
+
                 }
             });
         });
@@ -502,7 +559,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         {
             $('#permanent_address').val($('#current_address').val());
         }
-    } 
+    }
     $('input:radio[name="guardian_is"]').change(
             function () {
                 if ($(this).is(':checked')) {

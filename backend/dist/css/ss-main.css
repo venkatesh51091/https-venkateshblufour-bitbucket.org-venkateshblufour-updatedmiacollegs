@@ -7,7 +7,7 @@
 }
 @font-face {
   font-family:'Roboto-Bold';
-  src: url('../fonts/Roboto-Bold.ttf');
+  src: url('../fonts/Roboto-Bold.ttf'); 
   font-weight: normal;
   font-style: normal;
 }
@@ -19,6 +19,15 @@ html,body{min-height:100%}.layout-boxed html,.layout-boxed body{height:100%}body
 
 span.logo-lg img {
     width: 85%;
+}
+
+.list-group-unbordered>.list-group-item {
+    display: inline-block;
+    width: 100%;
+}
+
+.list-group-unbordered>.list-group-item:nth-child(4) a {
+    width: 78%;
 }
 
 

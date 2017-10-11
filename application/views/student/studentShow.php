@@ -2,7 +2,7 @@
 $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
 ?>
 <div class="content-wrapper" style="min-height: 946px;">
-    <section class="content-header">
+    <section class="content-header"> 
         <h1>
             <i class="fa fa-user-plus"></i> <?php echo $this->lang->line('student_information'); ?> <small><?php echo $this->lang->line('student1'); ?></small>      </h1>
     </section>
@@ -21,11 +21,23 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                                 <b><?php echo $this->lang->line('roll_no'); ?></b> <a class="pull-right text-aqua"><?php echo $student['roll_no']; ?></a>
                             </li>
                             <li class="list-group-item">
-                                <b><?php echo $this->lang->line('class'); ?></b> <a class="pull-right text-aqua"><?php echo $student['class']; ?></a>
+                                <b><?php echo $this->lang->line('class'); ?></b> <a class="pull-right text-aqua"><?php echo $student['class']; ?>  </a>
                             </li>
+
                             <li class="list-group-item">
-                                <b><?php echo $this->lang->line('section'); ?></b> <a class="pull-right text-aqua"><?php echo $student['section']; ?></a>
+                                <b><?php echo $this->lang->line('class'); ?></b> <a class="pull-right text-aqua"><?php 
+                                    if( isset($section_final_List)) {
+                                        foreach ($section_final_List as $key => $value) {
+                                           echo $value['section'].'<br/>';
+                                        }
+                                    }
+
+                                  ?>  </a>
                             </li>
+
+                            <!--<li class="list-group-item">
+                                <b><?php echo $this->lang->line('section'); ?></b> <a class="pull-right text-aqua"><?php echo $student['section']; ?></a>
+                            </li>-->
                             <!--<li class="list-group-item">
                                 <b><?php echo $this->lang->line('rte'); ?></b> <a class="pull-right text-aqua"><?php echo $student['rte']; ?></a>
                             </li>-->
@@ -830,7 +842,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                 data += '</div>  ';
                 $('.modal-body_logindetail').html(data);
                 $("#scheduleModal").modal('show');
-            } 
+            }
         });
     });
 
