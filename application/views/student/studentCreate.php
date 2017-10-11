@@ -773,7 +773,7 @@
                         success: function (data) {
                             $('#sibling_name').text("Sibling: " + data.firstname + " " + data.lastname);
                             $('#sibling_name_next').val(data.firstname + " " + data.lastname);
-                            $('#sibling_id').val(student_id);
+                            $('#sibling_id').val(student_id); 
                             $('#father_name').val(data.father_name);
                             $('#father_phone').val(data.father_phone);
                             $('#father_occupation').val(data.father_occupation);

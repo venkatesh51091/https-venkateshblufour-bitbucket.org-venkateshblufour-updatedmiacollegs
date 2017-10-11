@@ -830,7 +830,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
                 data += '</div>  ';
                 $('.modal-body_logindetail').html(data);
                 $("#scheduleModal").modal('show');
-            }
+            } 
         });
     });
 

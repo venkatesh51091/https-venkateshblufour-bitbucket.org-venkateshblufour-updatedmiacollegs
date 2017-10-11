@@ -502,7 +502,7 @@ $currency_symbol = $this->customlib->getSchoolCurrencyFormat();
         {
             $('#permanent_address').val($('#current_address').val());
         }
-    }
+    } 
     $('input:radio[name="guardian_is"]').change(
             function () {
                 if ($(this).is(':checked')) {

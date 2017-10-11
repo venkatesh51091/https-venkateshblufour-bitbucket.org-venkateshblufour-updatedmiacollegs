@@ -687,7 +687,7 @@ class student extends Admin_Controller {
         $config['file_name'] = $id . ".jpg";
         $this->upload->initialize($config);
         $this->load->library('upload', $config);
-        if ($this->upload->do_upload()) {
+        if ($this->upload->do_upload()) { 
             $data = array('upload_data' => $this->upload->data());
             $upload_data = $this->upload->data();
             $data_record = array('id' => $id, 'image' => $upload_data['file_name']);
